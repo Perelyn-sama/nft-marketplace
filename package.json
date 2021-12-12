@@ -21,6 +21,10 @@
   },
   "homepage": "https://github.com/Perelyn-sama/nft-marketplace#readme",
   "devDependencies": {
-    "@openzeppelin/contracts": "^4.4.0"
+    "@openzeppelin/contracts": "^4.4.0",
+    "@truffle/hdwallet-provider": "^2.0.0"
+  },
+  "dependencies": {
+    "dotenv": "^10.0.0"
   }
 }

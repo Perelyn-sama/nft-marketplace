@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "./NFT.sol";
 
 
-contract NFTMarket is ReentrancyGuard{
+contract MarketPlace is ReentrancyGuard{
     // Declaring state variables 
     using Counters for Counters.Counter;
     Counters.Counter private _itemIds;
@@ -85,7 +85,6 @@ contract NFTMarket is ReentrancyGuard{
 
             // Getting the token ID of this particular nft
             uint tokenId = idToMarketItem[itemId].tokenId;
-
 
             require(msg.value == price, "Please submit the asking price in order to complete the purchase " );
 

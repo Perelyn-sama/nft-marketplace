@@ -1,5 +1,8 @@
-var SimpleStorage = artifacts.require("./SimpleStorage.sol");
+var NFT = artifacts.require("./NFT.sol");
+var MarketPlace = artifacts.require("./MarketPlace.sol");
 
-module.exports = function(deployer) {
-  deployer.deploy(SimpleStorage);
+module.exports = async function (deployer) {
+  deployer.deploy(NFT);
+
+  deployer.deploy(MarketPlace);
 };
