@@ -1,8 +1,12 @@
+const fs = require("fs");
+const secret = JSON.parse(fs.readFileSync(".secret.json").toString().trim());
+
 var NFT = artifacts.require("./NFT.sol");
 var MarketPlace = artifacts.require("./MarketPlace.sol");
 
 module.exports = async function (deployer) {
-  deployer.deploy(NFT);
+  await deployer.deploy(MarketPlace);
+  const marketplace = await MarketPlace.deployed();
 
-  deployer.deploy(MarketPlace);
+  await deployer.deploy(NFT, marketplace.address);
 };

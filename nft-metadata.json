@@ -1,0 +1,15 @@
+{
+  "attributes": [
+    {
+      "trait_type": "race",
+      "value": "human"
+    },
+    {
+      "trait_type": "status",
+      "value": "tired"
+    }
+  ],
+  "description": "Tired night dev who just wants a tech gig that pays $1M",
+  "image": "https://gateway.pinata.cloud/ipfs/QmcYswyCuNqDA41henoG5vESVseEcyUTV9wWTPPr3dsS6V",
+  "name": "Perelyn"
+}
