@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import NFT from "./contracts/NFT.json";
 import getWeb3 from "./getWeb3";
 import { privateKey } from "./secret";
@@ -7,50 +7,72 @@ import { privateKey } from "./secret";
 // Marketplace 0x7c5294C50c4C8376fAFdE30cc98f521931C56844
 import "./App.css";
 
-class App extends Component {
-  state = { itemId: 0, web3: null, accounts: null, contract: null };
+const App = () => {
+  const [itemId, setitemId] = useState(0);
+  const [web3, setWeb3] = useState(undefined);
+  const [accounts, setAccounts] = useState([]);
+  const [contract, setContract] = useState([]);
 
-  componentDidMount = async () => {
-    try {
-      // Get network provider and web3 instance.
-      const web3 = await getWeb3();
+  useEffect(() => {
+    const init = async () => {
+      try {
+        // Get network provider and web3 instance.
+        const web3 = await getWeb3();
 
-      // Use web3 to get the user's accounts.
-      const accounts = await web3.eth.getAccounts();
+        // Use web3 to get the user's accounts.
+        const accounts = await web3.eth.getAccounts();
 
-      // Get the contract instance.
-      const networkId = await web3.eth.net.getId();
-      const deployedNetwork = NFT.networks[networkId];
-      const instance = new web3.eth.Contract(
-        NFT.abi,
-        deployedNetwork && deployedNetwork.address
-      );
+        // Get the contract instance.
+        const networkId = await web3.eth.net.getId();
+        const deployedNetwork = NFT.networks[networkId];
+        const contract = new web3.eth.Contract(
+          NFT.abi,
+          deployedNetwork && deployedNetwork.address
+        );
 
-      // Set web3, accounts, and contract to the state, and then proceed with an
-      // example of interacting with the contract's methods.
-      this.setState({ web3, accounts, contract: instance });
-    } catch (error) {
-      // Catch any errors for any of the above operations.
-      alert(
-        `Failed to load web3, accounts, or contract. Check console for details.`
-      );
-      console.error(error);
-    }
-  };
+        // Set web3, accounts, and contract to the state, and then proceed with an
+        // example of interacting with the contract's methods.
+        setWeb3(web3);
+        setAccounts(accounts);
+        setContract(contract);
+      } catch (error) {
+        // Catch any errors for any of the above operations.
+        alert(
+          `Failed to load web3, accounts, or contract. Check console for details.`
+        );
+        console.error(error);
+      }
+    };
+    init();
+  }, []);
 
-  mint = async () => {
-    const { accounts, contract } = this.state;
+  // useEffect(() => {
+  //   const load = async () => {
+  //     // Stores a given value, 5 by default.
+  //     await contract.methods.set(5).send({ from: accounts[0] });
 
+  //     // Get the value from the contract to prove it worked.
+  //     const response = await contract.methods.get().call();
+
+  //     // Update state with the result.
+  //     setStorageValue(response);
+  //   }
+  //   if(typeof web3 !== 'undefined'
+  //      && typeof accounts !== 'undefined'
+  //      && typeof contract !== 'undefined') {
+  //     load();
+  //   }
+  // }, [web3, accounts, contract]);
+
+  if (typeof web3 === "undefined") {
+    return <div>Loading Web3, accounts, and contract...</div>;
+  }
+
+  const mint = async () => {
     const tokenUri =
       "https://gateway.pinata.cloud/ipfs/QmcYswyCuNqDA41henoG5vESVseEcyUTV9wWTPPr3dsS6V";
 
-    console.log(contract._address);
-    console.log(accounts);
-
-    const nonce = await this.state.web3.eth.getTransactionCount(
-      accounts[0],
-      "latest"
-    ); //get latest nonce
+    const nonce = await web3.eth.getTransactionCount(accounts[0], "latest"); //get latest nonce
 
     //the transaction
     const tx = {
@@ -61,21 +83,14 @@ class App extends Component {
       data: contract.methods.createToken(tokenUri).encodeABI(),
     };
 
-    const signPromise = this.state.web3.eth.accounts.signTransaction(
-      tx,
-      privateKey
-    );
+    const signPromise = web3.eth.accounts.signTransaction(tx, privateKey);
     signPromise
       .then((signedTx) => {
-        this.state.web3.eth.sendSignedTransaction(
+        web3.eth.sendSignedTransaction(
           signedTx.rawTransaction,
           function (err, hash) {
             if (!err) {
-              console.log(
-                "The hash of your transaction is: ",
-                hash,
-                "\nCheck Alchemy's Mempool to view the status of your transaction!"
-              );
+              console.log("The hash of your transaction is: ", hash);
             } else {
               console.log(
                 "Something went wrong when submitting your transaction:",
@@ -95,20 +110,15 @@ class App extends Component {
       )
       .call();
 
-    this.setState({ itemId: response });
+    setitemId(response);
   };
 
-  render() {
-    if (!this.state.web3) {
-      return <div>Loading Web3, accounts, and contract...</div>;
-    }
-    return (
-      <div className="App">
-        <button onClick={this.mint}>Mint</button>
-        {this.state.itemId}
-      </div>
-    );
-  }
-}
+  return (
+    <div className="App">
+      <button onClick={mint}>Mint</button>
+      {itemId}
+    </div>
+  );
+};
 
 export default App;
