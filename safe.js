@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import NFT from "./contracts/NFT.json";
-// client\src\contracts\NFT.json
 import getWeb3 from "./getWeb3";
 import { privateKey } from "./secret";
 
@@ -71,10 +70,9 @@ const App = () => {
 
   const mint = async () => {
     const tokenUri =
-      "https://gateway.pinata.cloud/ipfs/QmY9p6aqQHuBck6LXX7yuycvMxqk8wXQqc3Jj5wdaokPfJ";
+      "https://gateway.pinata.cloud/ipfs/QmcYswyCuNqDA41henoG5vESVseEcyUTV9wWTPPr3dsS6V";
 
-    //get latest nonce
-    const nonce = await web3.eth.getTransactionCount(accounts[0], "latest");
+    const nonce = await web3.eth.getTransactionCount(accounts[0], "latest"); //get latest nonce
 
     //the transaction
     const tx = {
@@ -92,11 +90,7 @@ const App = () => {
           signedTx.rawTransaction,
           function (err, hash) {
             if (!err) {
-              console.log(
-                "The hash of your transaction is: ",
-                hash,
-                "\nCheck Alchemy's Mempool to view the status of your transaction!"
-              );
+              console.log("The hash of your transaction is: ", hash);
             } else {
               console.log(
                 "Something went wrong when submitting your transaction:",
@@ -118,8 +112,6 @@ const App = () => {
 
     setitemId(response);
   };
-  console.log(accounts[0], "first account ");
-  console.log(contract._address, "contract address");
 
   return (
     <div className="App">

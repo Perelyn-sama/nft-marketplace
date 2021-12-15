@@ -1,6 +1,3 @@
-const fs = require("fs");
-const secret = JSON.parse(fs.readFileSync(".secret.json").toString().trim());
-
 var NFT = artifacts.require("./NFT.sol");
 var MarketPlace = artifacts.require("./MarketPlace.sol");
 
