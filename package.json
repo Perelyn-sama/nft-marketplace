@@ -21,7 +21,6 @@
   },
   "homepage": "https://github.com/Perelyn-sama/nft-marketplace#readme",
   "devDependencies": {
-    "@alch/alchemy-web3": "^1.1.9",
     "@openzeppelin/contracts": "^4.4.0",
     "@truffle/hdwallet-provider": "^2.0.0"
   },

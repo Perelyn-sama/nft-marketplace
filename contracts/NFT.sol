@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 contract NFT  is ERC721URIStorage {
  using Counters for Counters.Counter;
  Counters.Counter private _tokenIds;
- address public contractAddress;
+ address contractAddress;
 
  constructor(address marketplaceAddress) ERC721("Perelyn's Digital Marketplace", "PDM"){
      contractAddress = marketplaceAddress;
@@ -21,8 +21,6 @@ contract NFT  is ERC721URIStorage {
         _mint(msg.sender, newItemId);
         _setTokenURI(newItemId, tokenURI);
         setApprovalForAll(contractAddress, true);
-
-        return newItemId;
     }
 
 }
